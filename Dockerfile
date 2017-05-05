@@ -1,7 +1,10 @@
 FROM haskell
 
-RUN git clone https://github.com/purescript/pursuit.git
-WORKDIR /pursuit
+WORKDIR /pursuit/data
+RUN git clone https://github.com/purescript/pursuit-backups.git verified
+
+RUN git clone https://github.com/purescript/pursuit.git /pursuit-build
+WORKDIR /pursuit-build
 
 RUN stack upgrade
 RUN stack update
@@ -9,17 +12,15 @@ RUN stack update
 RUN stack setup
 RUN stack build --dry-run
 RUN stack build --dry-run --prefetch
-
 RUN stack build --fast --keep-going --no-test --no-haddock
+RUN stack build --copy-bins
 
-WORKDIR /pursuit/data
-RUN git clone https://github.com/purescript/pursuit-backups.git verified
+WORKDIR /pursuit
+RUN rm -rf /pursuit-build
 
 EXPOSE 3000
-
 # ENV PURSUIT_APPDATADIR /database
-WORKDIR /pursuit
-CMD stack exec pursuit
+CMD pursuit
 # docker run -p 3000:3000 -it pursuit
 # docker ip
 # curl 192.168.99.100:3000
