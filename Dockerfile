@@ -12,12 +12,11 @@ RUN stack build --dry-run --prefetch
 RUN stack build --fast --keep-going --no-test --no-haddock
 RUN stack build --copy-bins
 
-WORKDIR /pursuit/data
-RUN git clone https://github.com/purescript/pursuit-backups.git verified
-
-
 WORKDIR /pursuit
 RUN rm -rf /pursuit-build
+
+RUN git --git-dir=/temp.git clone --depth=1 https://github.com/purescript/pursuit-backups.git data/verified
+RUN rm -rf /temp.git
 
 EXPOSE 3000
 # ENV PURSUIT_APPDATADIR /database
