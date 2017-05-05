@@ -1,23 +1,14 @@
 FROM haskell
 
-RUN git clone https://github.com/purescript/pursuit.git /pursuit-build
-WORKDIR /pursuit-build
+COPY download-docs.sh /download-docs.sh
+RUN /download-docs.sh
+RUN rm /download-docs.sh
 
-RUN stack upgrade
-RUN stack update
-
-RUN stack setup
-RUN stack build --dry-run
-RUN stack build --dry-run --prefetch
-RUN stack build --fast --keep-going --no-test --no-haddock
-RUN stack build --copy-bins
+COPY build-pursuit-bin.sh /build-pursuit-bin.sh
+RUN /build-pursuit-bin.sh
+RUN rm /build-pursuit-bin.sh
 
 WORKDIR /pursuit
-RUN rm -rf /pursuit-build
-
-RUN git --git-dir=/temp.git clone --depth=1 https://github.com/purescript/pursuit-backups.git data/verified
-RUN rm -rf /temp.git
-
 EXPOSE 3000
 # ENV PURSUIT_APPDATADIR /database
 CMD pursuit
