@@ -1,8 +1,5 @@
 FROM haskell
 
-WORKDIR /pursuit/data
-RUN git clone https://github.com/purescript/pursuit-backups.git verified
-
 RUN git clone https://github.com/purescript/pursuit.git /pursuit-build
 WORKDIR /pursuit-build
 
@@ -14,6 +11,10 @@ RUN stack build --dry-run
 RUN stack build --dry-run --prefetch
 RUN stack build --fast --keep-going --no-test --no-haddock
 RUN stack build --copy-bins
+
+WORKDIR /pursuit/data
+RUN git clone https://github.com/purescript/pursuit-backups.git verified
+
 
 WORKDIR /pursuit
 RUN rm -rf /pursuit-build
