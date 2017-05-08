@@ -6,7 +6,7 @@ RUN git clone https://github.com/purescript/pursuit-backups.git verified
 # ENV PURSUIT_APPDATADIR /database
 WORKDIR /pursuit
 EXPOSE 3000
-CMD ["pursuit"]
+CMD ["/pursuit/pursuit"]
 # docker run -p 3000:3000 -it pursuit
 # docker ip
 # curl 192.168.99.100:3000
